@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -22,6 +23,14 @@ namespace App1
             get { return movieList; }
             set { movieList = value; OnpropertyChanged(); }
         }
+        private bool isIndicatorBusy;
+
+        public bool IsIndicatorBusy
+        {
+            get { return isIndicatorBusy; }
+            set { isIndicatorBusy = value; OnpropertyChanged(); }
+        }
+
 
         private string searchText;
 
@@ -31,29 +40,18 @@ namespace App1
             set
             {
                 searchText = value;
-                if (string.IsNullOrEmpty(value))
-                    MovieList = new ObservableCollection<Search>(movies.Search);
                 OnpropertyChanged();
             }
         }
-        public Command FilterCommand
+        public  Command FilterCommand
         {
             get
             {
-                return new Command(() =>
+                return new Command(async () =>
                 {
-                    List<Search> searchList = new List<Search>();
-                    if (string.IsNullOrEmpty(SearchText))
-                        MovieList = new ObservableCollection<Search>(movies.Search);
-                    else
-                    {
-                        for (int i = 0; i < movies.Search.Count; i++)
-                        {
-                            if (movies.Search[i].Title.ToLower().Contains(SearchText.ToLower()))
-                                searchList.Add(movies.Search[i]);
-                        }
-                        MovieList = new ObservableCollection<Search>(searchList);
-                    }
+                    IsIndicatorBusy = true;
+                     await GetMoviesList(SearchText);
+                    IsIndicatorBusy = false;
                 });
             }
         }
@@ -61,13 +59,12 @@ namespace App1
         public MovieViewModel()
         {
             client = new HttpClient();
-            GetMoviesList();
         }
-        private async void GetMoviesList()
+        private async Task GetMoviesList(string title)
         {
             try
             {
-                Uri uri = new Uri(string.Format("https://www.omdbapi.com/?apikey=b9bd48a6&s=Marvel&type=movie", string.Empty));
+                Uri uri = new Uri(string.Format("https://www.omdbapi.com/?apikey=b9bd48a6&s=" + title + "&type=movie", string.Empty));
                 HttpResponseMessage response = await client.GetAsync(uri);
                 if (response.IsSuccessStatusCode)
                 {

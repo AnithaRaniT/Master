@@ -6,61 +6,99 @@
     BackgroundColor="LightGray"
     NavigationPage.HasNavigationBar="False">
     <ContentPage.Content>
-        <StackLayout BackgroundColor="LightGray">
-            <StackLayout HorizontalOptions="StartAndExpand" Orientation="Horizontal">
-                <Label
-                    Margin="5,0,0,0"
-                    FontAttributes="Bold"
-                    FontSize="18"
-                    HorizontalOptions="StartAndExpand"
-                    Text="Film List"
-                    TextColor="Black"
-                    VerticalOptions="CenterAndExpand" />
-                <SearchBar
-                    BackgroundColor="White"
-                    HorizontalOptions="EndAndExpand"
-                    Placeholder="Enter the Title"
-                    SearchCommand="{Binding FilterCommand}"
-                    Text="{Binding SearchText}" />
-            </StackLayout>
-            <CollectionView
-                Margin="0"
-                BackgroundColor="LightGray"
-                EmptyView="No data found."
-                ItemsLayout="VerticalGrid, 2"
-                ItemsSource="{Binding MovieList}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid
-                            BackgroundColor="LightGray"
-                            ColumnSpacing="5"
-                            RowSpacing="5">
-                            <Frame BorderColor="LightGray">
-                                <StackLayout
-                                    HorizontalOptions="FillAndExpand"
-                                    Spacing="0"
-                                    VerticalOptions="FillAndExpand">
-                                    <Image
-                                        Aspect="AspectFit"
+        <AbsoluteLayout BackgroundColor="LightGray">
+            <Grid
+                AbsoluteLayout.LayoutBounds="0,0,1,1"
+                AbsoluteLayout.LayoutFlags="All"
+                RowSpacing="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <StackLayout
+                    Grid.Row="0"
+                    HorizontalOptions="Start"
+                    Orientation="Horizontal"
+                    VerticalOptions="Start">
+                    <Label
+                        Margin="5,0,0,0"
+                        FontAttributes="Bold"
+                        FontSize="18"
+                        HorizontalOptions="StartAndExpand"
+                        Text="Film List"
+                        TextColor="Black"
+                        VerticalOptions="CenterAndExpand" />
+                    <SearchBar
+                        BackgroundColor="White"
+                        HorizontalOptions="EndAndExpand"
+                        Placeholder="Enter the Title"
+                        SearchCommand="{Binding FilterCommand}"
+                        Text="{Binding SearchText}" />
+                </StackLayout>
+                <CollectionView
+                    Grid.Row="1"
+                    Margin="0"
+                    BackgroundColor="DarkGray"
+                    ItemsLayout="VerticalGrid, 2"
+                    ItemsSource="{Binding MovieList}">
+                    <CollectionView.EmptyView>
+                        <ContentView>
+                            <Grid HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                                <Label
+                                    FontSize="Large"
+                                    HorizontalOptions="CenterAndExpand"
+                                    Text="No data available"
+                                    TextColor="Black"
+                                    VerticalOptions="CenterAndExpand" />
+                            </Grid>
+                        </ContentView>
+                    </CollectionView.EmptyView>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid
+                                BackgroundColor="LightGray"
+                                ColumnSpacing="5"
+                                RowSpacing="5">
+                                <Frame BorderColor="LightGray">
+                                    <StackLayout
                                         HorizontalOptions="FillAndExpand"
-                                        Source="{Binding Poster}"
-                                        VerticalOptions="FillAndExpand" />
-                                    <Label
-                                        HorizontalOptions="Start"
-                                        Text="{Binding Title, StringFormat='Title : {0}'}"
-                                        TextColor="Black"
-                                        VerticalOptions="Center" />
-                                    <Label
-                                        HorizontalOptions="StartAndExpand"
-                                        Text="{Binding Year, StringFormat='Year :{0}'}"
-                                        TextColor="Black"
-                                        VerticalOptions="Center" />
-                                </StackLayout>
-                            </Frame>
-                        </Grid>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </StackLayout>
+                                        Spacing="0"
+                                        VerticalOptions="FillAndExpand">
+                                        <Image
+                                            Aspect="AspectFit"
+                                            HorizontalOptions="FillAndExpand"
+                                            Source="{Binding Poster}"
+                                            VerticalOptions="FillAndExpand" />
+                                        <Label
+                                            HorizontalOptions="Start"
+                                            Text="{Binding Title, StringFormat='Title : {0}'}"
+                                            TextColor="Black"
+                                            VerticalOptions="Center" />
+                                        <Label
+                                            HorizontalOptions="StartAndExpand"
+                                            Text="{Binding Year, StringFormat='Year :{0}'}"
+                                            TextColor="Black"
+                                            VerticalOptions="Center" />
+                                    </StackLayout>
+                                </Frame>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
+            <ContentView
+                AbsoluteLayout.LayoutBounds="0,0,1,1"
+                AbsoluteLayout.LayoutFlags="All"
+                BackgroundColor="{StaticResource OverLayColor}"
+                HorizontalOptions="FillAndExpand"
+                IsVisible="{Binding IsIndicatorBusy}"
+                VerticalOptions="FillAndExpand">
+                <ActivityIndicator
+                    HorizontalOptions="Center"
+                    IsRunning="{Binding IsIndicatorBusy}"
+                    VerticalOptions="Center"
+                    Color="White" />
+            </ContentView>
+        </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>
