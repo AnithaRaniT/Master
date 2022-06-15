@@ -58,20 +58,11 @@ namespace App1
             }
         }
 
-        //public ICommand FilterCommand { private set; get; }
-
         public MovieViewModel()
         {
             client = new HttpClient();
-            //FilterCommand = new Command(OnFilterCommand);
             GetMoviesList();
         }
-
-        private void OnFilterCommand(object obj)
-        {
-
-        }
-
         private async void GetMoviesList()
         {
             try
